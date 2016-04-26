@@ -1,0 +1,130 @@
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+
+	<edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="Mymeetings">
+			<EntityType Name="Meetingsdate">
+				<Key>
+					<PropertyRef Name="date"/>
+				</Key>
+				<Property Name="date" Type="Edm.DateTime" Nullable="false" sap:label="Date"></Property>
+				<Property Name="status" Type="Edm.String" Nullable="false" sap:label="Status" MaxLength="1"></Property>
+				<NavigationProperty Name="DateToMeetings" Relationship="Mymeetings.MeetingsDate_Meetings" ToRole="meetings" FromRole="meetingsDate"/>
+			</EntityType>
+			<EntityType Name="meetings">
+				<Key>
+					<PropertyRef Name="meetingKey"/>
+				</Key>
+				<Property Name="date" Type="Edm.DateTime" Nullable="false" sap:label="Date"></Property>
+				<Property Name="meetingKey" Type="Edm.Int16" Nullable="false" sap:label="Key" MaxLength="10"></Property>
+				<Property Name="mainTopic" Type="Edm.String" Nullable="false" sap:label="Main Topic" MaxLength="30"></Property>
+				<Property Name="startTime" Type="Edm.Time" Nullable="false" sap:label="Start Time" MaxLength="8"></Property>
+				<Property Name="endTime" Type="Edm.Time" Nullable="false" sap:label="End Time" MaxLength="8"></Property>
+				<Property Name="roomKey" Type="Edm.Int16" Nullable="false" sap:label="Room" MaxLength="10"></Property>
+				<Property Name="topics" Type="Edm.String" Nullable="false" sap:label="Topics" MaxLength="355"></Property>
+				<NavigationProperty Name="DateToMeetings" Relationship="Mymeetings.MeetingsDate_Meetings" ToRole="meetingsDate" FromRole="meetings"/>
+				<NavigationProperty Name="RoomsToMeeting" Relationship="Mymeetings.Meetings_Rooms" ToRole="rooms" FromRole="meetings"/>
+				<NavigationProperty Name="MeetingpartToMeetings" Relationship="Mymeetings.Meetings_Meetingspart" ToRole="meetingpart" FromRole="meetings"/>
+			</EntityType>
+			<Association Name="MeetingsDate_Meetings">
+				<End Type="Mymeetings.Meetingsdate" Role="meetingsDate" Multiplicity="0..1"></End>
+				<End Type="Mymeetings.meetings" Role="meetings" Multiplicity="*"></End>
+				<ReferentialConstraint>
+					<Principal Role="meetingsDate">
+						<PropertyRef Name="date"/>
+					</Principal>
+					<Dependent Role="meetings">
+						<PropertyRef Name="date"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityType Name="rooms">
+				<Key>
+					<PropertyRef Name="roomkey"/>
+				</Key>
+				<Property Name="roomkey" Type="Edm.Int16" Nullable="false" sap:label="Room Key"></Property>
+				<Property Name="room" Type="Edm.String" Nullable="false" sap:label="Room" MaxLength="20"></Property>
+				<NavigationProperty Name="RoomsToMeeting" Relationship="Mymeetings.Meetings_Rooms" ToRole="meetings" FromRole="rooms"/>
+			</EntityType>
+			<Association Name="Meetings_Rooms">
+				<End Type="Mymeetings.meetings" Role="meetings" Multiplicity="*"></End>
+				<End Type="Mymeetings.rooms" Role="rooms" Multiplicity="0..1"></End>
+				<ReferentialConstraint>
+					<Principal Role="rooms">
+						<PropertyRef Name="roomkey"/>
+					</Principal>
+					<Dependent Role="meetings">
+						<PropertyRef Name="roomKey"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityType Name="meetingpart">
+				<Key>
+					<PropertyRef Name="meetingKey"/>
+					<PropertyRef Name="participantKey"/>
+				</Key>
+				<Property Name="meetingKey" Type="Edm.Int16" Nullable="false" sap:label="Meeting Key"></Property>
+				<Property Name="participantKey" Type="Edm.Int16" Nullable="false" sap:label="Participant Key"></Property>
+				<NavigationProperty Name="meetingpartToParticipants" Relationship="Mymeetings.MeetingsPart_Participants" ToRole="participants"
+					FromRole="meetingpart"/>
+				<NavigationProperty Name="MeetingpartToMeeting" Relationship="Mymeetings.Meetings_Meetingspart" ToRole="meetings" FromRole="meetingpart"/>
+			</EntityType>
+			<Association Name="Meetings_Meetingspart">
+				<End Type="Mymeetings.meetings" Role="meetings" Multiplicity="*"></End>
+				<End Type="Mymeetings.meetingpart" Role="meetingpart" Multiplicity="*"></End>
+				<ReferentialConstraint>
+					<Principal Role="meetings">
+						<PropertyRef Name="meetingKey"/>
+					</Principal>
+					<Dependent Role="meetingpart">
+						<PropertyRef Name="meetingKey"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityType Name="participants">
+				<Key>
+					<PropertyRef Name="participantKey"/>
+				</Key>
+				<Property Name="participantKey" Type="Edm.Int16" Nullable="false" sap:label="Participant Key"></Property>
+				<Property Name="participantName" Type="Edm.String" Nullable="false" sap:label="Participant Name"></Property>
+				<Property Name="participantLName" Type="Edm.String" Nullable="false" sap:label="Participant Last Name"></Property>
+				<NavigationProperty Name="participants_to_meetingspart" Relationship="Mymeetings.MeetingsPart_Participants" ToRole="meetingpart"
+					FromRole="participants"/>
+			</EntityType>
+			<Association Name="MeetingsPart_Participants">
+				<End Type="Mymeetings.meetingpart" Role="meetingpart" Multiplicity="*"></End>
+				<End Type="Mymeetings.participants" Role="participants" Multiplicity="0..1"></End>
+				<ReferentialConstraint>
+					<Principal Role="participants">
+						<PropertyRef Name="participantKey"/>
+					</Principal>
+					<Dependent Role="meetingpart">
+						<PropertyRef Name="participantKey"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityContainer Name="DemoService" m:IsDefaultEntityContainer="true">
+				<EntitySet Name="Meetings" EntityType="Mymeetings.meetings"/>
+				<EntitySet Name="MeetingDate" EntityType="Mymeetings.Meetingsdate"/>
+				<EntitySet Name="Rooms" EntityType="Mymeetings.rooms"/>
+				<EntitySet Name="Meetingspart" EntityType="Mymeetings.meetingpart"/>
+				<EntitySet Name="Participants" EntityType="Mymeetings.participants"/>
+				<AssociationSet Name="MeetingsDateMeetings" Association="Mymeetings.MeetingsDate_Meetings">
+					<End Role="meetingsDate" EntitySet="MeetingDate"></End>
+					<End Role="meetings" EntitySet="Meetings"></End>
+				</AssociationSet>
+				<AssociationSet Name="MeetingsRooms" Association="Mymeetings.Meetings_Rooms">
+					<End Role="meetings" EntitySet="Meetings"></End>
+					<End Role="rooms" EntitySet="Rooms"></End>
+				</AssociationSet>
+				<AssociationSet Name="MeetingsMeetingpart" Association="Mymeetings.Meetings_Meetingspart">
+					<End Role="meetings" EntitySet="Meetings"></End>
+					<End Role="meetingpart" EntitySet="Meetingspart"></End>
+				</AssociationSet>
+				<AssociationSet Name="MeetingpartParticipants" Association="Mymeetings.MeetingsPart_Participants">
+					<End Role="meetingpart" EntitySet="Meetingspart"></End>
+					<End Role="participants" EntitySet="Participants"></End>
+				</AssociationSet>
+			</EntityContainer>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>
