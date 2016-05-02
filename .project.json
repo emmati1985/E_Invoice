@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "supportedLanguages": "en,es",
+    "defaultLanguage": "es",
+    "defaultI18NPropertyFile": "",
+    "resourceModelName": ""
+  },
+  "performancetoolkit.runner": {
+    "e2eDuration": {
+      "error": 3750,
+      "warning": 2750
+    },
+    "roundTrips": {
+      "error": 4,
+      "warning": 2
+    },
+    "backendRequests": {
+      "error": 4,
+      "warning": 2
+    }
+  }
+}

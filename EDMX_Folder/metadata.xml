@@ -2,6 +2,65 @@
 <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
 	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
 	<edmx:DataServices m:DataServiceVersion="2.0">
+<<<<<<< HEAD
+		<Schema Namespace="Invoices" xml:lang="es" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityType Name="Master" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="InvoiceID"/>
+				</Key>
+				<Property Name="InvoiceID" Type="Edm.String" Nullable="false" MaxLength="15" sap:label="Invoice ID"/>
+				<Property Name="Status" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Status" sap:updatable="true"/>
+				<Property Name="CreatedAt" Type="Edm.DateTime" Precision="7" sap:label="Creation date & time" sap:creatable="false" sap:updatable="false"/>
+				<Property Name="ChangedAt" Type="Edm.DateTime" Precision="7" ConcurrencyMode="Fixed" sap:label="Last Date Time" sap:creatable="false"
+					sap:updatable="true"/>
+				<Property Name="CurrencyCode" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Currency Code" sap:semantics="currency-code"/>
+				<Property Name="Price" Type="Edm.Decimal" sap:label="Price Amount" Precision="16" Scale="3" sap:unit="CurrencyCode" sap:label="Preis"/>
+				<NavigationProperty Name="ToDetails" Relationship="Invoices.Assoc_Invoices_Details" FromRole="FromRole_Assoc_Invoices_Details"
+					ToRole="ToRole_Assoc_Invoices_Details"/>
+				<NavigationProperty Name="ToHistory" Relationship="Invoices.Assoc_Invoices_History" FromRole="FromRole_Assoc_Invoices_History"
+					ToRole="ToRole_Assoc_Invoices_History"/>
+				<NavigationProperty Name="ToAncestry" Relationship="Invoices.Assoc_Invoices_Ancestry" FromRole="FromRole_Assoc_Invoices_Ancestry"
+					ToRole="ToRole_Assoc_Invoices_Ancestry"/>
+			</EntityType>
+			<EntityType Name="Detail" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="InvoiceID"/>
+				</Key>
+				<Property Name="InvoiceID" Type="Edm.String" Nullable="false" MaxLength="15" sap:label="Invoice ID"/>
+				<Property Name="position" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Typcode"/>
+			    <Property Name="data1" Type="Edm.String" MaxLength="50" sap:label="Data1"/>
+			    <Property Name="data2" Type="Edm.String" MaxLength="50" sap:label="Data2"/>
+			    <Property Name="data3" Type="Edm.String" MaxLength="50" sap:label="Data3"/>       
+				<NavigationProperty Name="ToMaster" Relationship="Invoices.Assoc_Invoices_Details" FromRole="ToRole_Assoc_Invoices_Details"
+					ToRole="FromRole_Assoc_Invoices_Details"/>
+			</EntityType>
+			<EntityType Name="History" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="InvoiceID"/>
+					<PropertyRef Name="ChangedAt"/>
+				</Key>
+				<Property Name="InvoiceID" Type="Edm.String" Nullable="false" MaxLength="15" sap:label="Invoice ID"/>
+				<Property Name="ChangedAt" Type="Edm.DateTime" Precision="7" ConcurrencyMode="Fixed" sap:label="Last Date Time"/>
+				<Property Name="Status" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Status" sap:updatable="true"/>
+				<NavigationProperty Name="ToMaster" Relationship="Invoices.Assoc_Invoices_History" FromRole="ToRole_Assoc_Invoices_History"
+					ToRole="FromRole_Assoc_Invoices_History"/>
+				<!--<NavigationProperty Name="ToLineItems" Relationship="/IWBEP/GWSAMPLE_BASIC.Assoc_SalesOrder_SalesOrderLineItems"-->
+				<!--	FromRole="FromRole_Assoc_SalesOrder_SalesOrderLineItems" ToRole="ToRole_Assoc_SalesOrder_SalesOrderLineItems"/>-->
+			</EntityType>
+			<EntityType Name="Ancestry" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="InvoiceID"/>
+				</Key>
+				<Property Name="InvoiceID" Type="Edm.String" Nullable="false" MaxLength="15" sap:label="Invoice ID" sap:creatable="false"
+					sap:updatable="false"/>
+				<Property Name="Document" Type="Edm.String" Nullable="false" MaxLength="15" sap:label="Document" sap:creatable="false" sap:updatable="false"/>
+				<Property Name="DocType"  Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Document Type" sap:creatable="false"
+					sap:updatable="false"/>
+				<Property Name="Previous" Type="Edm.String" MaxLength="15" sap:label="Previous Document" sap:creatable="false" sap:updatable="false"/>
+				<Property Name="After"    Type="Edm.String" MaxLength="15" sap:label="After Document" sap:creatable="false" sap:updatable="false"/>
+				<NavigationProperty Name="ToMaster" Relationship="Invoices.assoc_invoices_ancestry"
+					FromRole="ToRole_Assoc_Invoices_Ancestry" ToRole="FromRole_Assoc_Invoices_Ancestry"/>
+=======
 		<Schema Namespace="E_INVOICES" xml:lang="es" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
 			<EntityType Name="Master" sap:content-version="1">
 				<Key>
@@ -80,6 +139,7 @@
 				<Property Name="After" Type="Edm.String" MaxLength="2" sap:label="After Document" sap:creatable="false" sap:updatable="false"/>
 				<NavigationProperty Name="ToProduct" Relationship="/IWBEP/GWSAMPLE_BASIC.Assoc_Product_SalesOrderLineItems"
 					FromRole="ToRole_Assoc_Product_SalesOrderLineItems" ToRole="FromRole_Assoc_Product_SalesOrderLineItems"/>
+>>>>>>> branch 'master' of https://github.com/emmati1985/E_Invoice.git
 			</EntityType>
 			
 			<Association Name="Assoc_VH_Country_Contacts" sap:content-version="1">
